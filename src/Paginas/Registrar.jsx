@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Alerta } from '../Componentes/Alerta'
-
+import axios from 'axios'
 
 export const Registrar = () => {
 
@@ -12,7 +12,7 @@ export const Registrar = () => {
 
   const [ alerta , setAlerta ] = useState({})
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     //Puedo poner todos dentro de un corchete y asi tener acceso a includes mucho mas facil para verificar.
@@ -43,7 +43,21 @@ export const Registrar = () => {
     setAlerta({})
 
     //Crear el usuario de la API...
-    
+    try {
+        const {data} = await axios.post('http://localhost:4000/api/usuarios' , { 
+        nombre , email , password
+      })
+
+      setAlerta({
+        msg: data.msg,
+        error: false
+      })
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: true
+      });
+    }
 
   }
 
